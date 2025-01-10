@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-export const ChatPageContainer = styled("div")(({ theme }) => ({
+export const ChatPageContainer = styled("div")({
   width: "80%",
   margin: "auto",
 
@@ -23,7 +23,7 @@ export const ChatPageContainer = styled("div")(({ theme }) => ({
   "& .text-area textarea": {
     paddingRight: "40px",
   },
-}));
+});
 
 export const PopupContainer = styled("div")({
   position: "fixed",
