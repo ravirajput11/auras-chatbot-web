@@ -2,6 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import { useAppSelector } from "../../use-app-dispatch";
 import { getChats, IChat } from "../../store/chatbotSlice";
 import { useChatPage } from "./use-chat-page";
+import parse from "html-react-parser";
+import { decode } from "html-entities";
 import { Button } from "@/components/ui/button";
 import botChatLogo from "../../assets/chats-page-image/bot-chat-logo.png";
 import chatRobotImage from "../../assets/chats-page-image/chat-robot-image-2x.png";
@@ -13,7 +15,15 @@ interface ChatMessageProps {
   chatContainerRef: React.RefObject<HTMLDivElement>;
 }
 
+const cleanResponse = (html: string) => {
+  // Decode entities and remove custom span classes
+  const decoded = decode(html);
+  return decoded.replace(/<span class=['"][^'"]*['"]>(.*?)<\/span>/g, "$1");
+};
+
 const ChatMessage = ({ chat, chatContainerRef }: ChatMessageProps) => {
+  const cleanedResponse = cleanResponse(chat.chatGptResponse ?? "");
+
   useEffect(() => {
     const scrollToBottom = () => {
       if (chatContainerRef.current) {
@@ -24,8 +34,7 @@ const ChatMessage = ({ chat, chatContainerRef }: ChatMessageProps) => {
       }
     };
 
-    const timeoutId = setTimeout(scrollToBottom, 100);
-    return () => clearTimeout(timeoutId);
+    scrollToBottom();
   }, [chat]);
 
   return (
@@ -42,10 +51,9 @@ const ChatMessage = ({ chat, chatContainerRef }: ChatMessageProps) => {
         </div>
       )}
       {chat.chatType === 2 && (
-        <div
-          className="text-sm w-5/6 text-[#232323] bg-[#FFFFFF] drop-shadow-[0_3px_6px_#00000029] px-7 py-4 text-[12px] rounded-r-xl rounded-bl-2xl"
-          dangerouslySetInnerHTML={{ __html: chat.chatGptResponse ?? "" }}
-        />
+        <div className="prose prose-xl max-w-none text-sm w-5/6 text-[#232323] bg-[#FFFFFF] drop-shadow-[0_3px_6px_#00000029] px-7 py-4 text-[12px] rounded-r-xl rounded-bl-2xl">
+          {parse(cleanedResponse)}
+        </div>
       )}
     </div>
   );
