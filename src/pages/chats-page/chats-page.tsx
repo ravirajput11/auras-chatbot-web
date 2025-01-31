@@ -103,6 +103,7 @@ export const ChatsPage = () => {
     handleSubmit(question);
   };
 
+  //Submit form
   const handleSubmit = (predefinedQuestion?: string) => {
     const question = predefinedQuestion || userQuestion;
     if (!question) return;
@@ -147,23 +148,37 @@ export const ChatsPage = () => {
   };
 
   return (
-    <>
+    <div className="relative min-h-screen w-full overflow-hidden">
+      {/* Background Logo */}
       <img
-        className="fixed top-28 left-1/4 opacity-100"
+        className="fixed top-28 right-1/4 opacity-100 pointer-events-none"
         src={AurasBgLogo}
         alt=""
       />
-      <main className="flex-1 relative max-w-6xl mx-auto pt-28 w-full p-6 flex flex-col md:flex-row gap-8 items-start">
-        {/* Left Side - Chat Interface */}
-        <div className="flex-1 space-y-1 ">
+
+      <div className="flex h-screen">
+        {/* Left Side - RobotImage */}
+        <div
+          className="w-1/2 flex items-center justify-center"
+          style={{ marginTop: "80px" }}
+        >
+          <img
+            src={chatRobotImage}
+            alt="Chat Illustration"
+            className="h-[calc(100vh-200px)] w-6/12 pr-5 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] "
+          />
+        </div>
+
+        {/* Right Side - Chat Container */}
+        <div className="w-6/12 pt-28 px-8">
           <div
             ref={chatContainerRef}
-            className="h-[calc(100vh-200px)] w-6/12 overflow-y-scroll pr-5 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+            className="h-[calc(100vh-200px)] overflow-y-auto pr-5 space-y-4 hide-scrollbar"
             style={{
               scrollBehavior: "smooth",
             }}
           >
-            {/* Bot Avatar and Initial Message */}
+            {/* Bot Initial Message */}
             <div className="flex items-center gap-2">
               <img
                 src={botChatLogo}
@@ -172,10 +187,11 @@ export const ChatsPage = () => {
                 height={70}
                 className="object-contain"
               />
-              <p className="text-[#232323] bg-[#FFFFFF] drop-shadow-[0_3px_6px_#00000029] px-7 py-4 text-[12px] rounded-r-xl rounded-bl-2xl">
+              <p className="text-[#232323] bg-[#FFFFFF] drop-shadow-[0_3px_6px_#00000029] px-7 py-4 text-sm rounded-r-xl rounded-bl-2xl">
                 Hi! I'm Auras. How may I help you?
               </p>
             </div>
+
             {/* Quick Action Buttons */}
             <div className="space-y-3 pl-20 text-[#232323]">
               <div className="flex flex-wrap gap-2">
@@ -208,7 +224,7 @@ export const ChatsPage = () => {
                 </Button>
               </div>
 
-              {/* auto scroll */}
+              {/* Chat Messages */}
               {chats.map((chat, index) => (
                 <ChatMessage
                   chat={chat}
@@ -216,6 +232,8 @@ export const ChatsPage = () => {
                   chatContainerRef={chatContainerRef}
                 />
               ))}
+
+              {/* Loading Indicator */}
               {chatResponseIsLoading && (
                 <div className="loader">
                   <div className="chat-loader"></div>
@@ -224,16 +242,17 @@ export const ChatsPage = () => {
             </div>
           </div>
 
-          <div className="relative">
+          {/* Input Area */}
+          <div className="absolute bottom-4 right-8 w-[40%]">
             <textarea
               onChange={(e) => handleTextChange(e.target.value)}
               value={userQuestion}
               onKeyDown={handleKeyDown}
               placeholder="Type your question here..."
-              className="fixed bottom-1 w-6/12 px-4 py-3 shadow-lg font-medium text-sm text-[#232323] rounded-xl bg-[#F4F1F5] border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#663399] focus:border-transparent"
+              className="w-full px-4 py-3 shadow-lg font-medium text-sm text-[#232323] rounded-xl bg-[#F4F1F5] border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#663399] focus:border-transparent"
             />
             <button
-              className="fixed left-2/4 rounded-2xl ring-[#804C9E] bg-[#804C9E] bottom-3 px-4 py-2 font-semibold text-sm z-10"
+              className="absolute right-4 top-1/2 -translate-y-1/2 rounded-2xl bg-[#804C9E] px-4 py-2 font-semibold text-sm text-white"
               onClick={() => handleSubmit()}
               disabled={disableButton}
             >
@@ -241,17 +260,7 @@ export const ChatsPage = () => {
             </button>
           </div>
         </div>
-        {/* Robot image */}
-        <div className="fixed -right-20 md:w-8/12 h-[84vh] flex justify-center items-center">
-          <img
-            src={chatRobotImage}
-            alt="Chat Illustration"
-            width={350}
-            height={450}
-            className="object-contain"
-          />
-        </div>
-      </main>
-    </>
+      </div>
+    </div>
   );
 };

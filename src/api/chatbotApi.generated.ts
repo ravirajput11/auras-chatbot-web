@@ -6,8 +6,8 @@ const injectedRtkApi = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     // baseUrl: "http://localhost:5000/api",
-    // baseUrl: "https://chat-gpt-server-eight.vercel.app/api",
     baseUrl: "https://auras-chatbot-henna.vercel.app/api",
+    // baseUrl: "https://dev.aurascc.net/api",
     prepareHeaders: async (headers, { getState }) => {
       const state = getState() as RootState;
       const token = state.auth.access_token;
